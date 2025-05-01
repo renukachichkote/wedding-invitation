@@ -87,7 +87,7 @@ body {
 }
 
 .hero {
-  background-image: url("/images/hero1-min.JPG");
+  background-image: url("/images/hero1.JPG");
   background-size: cover;
   background-position: center top;
   background-repeat: no-repeat;
@@ -104,7 +104,7 @@ body {
 
 @media screen and (max-width: 768px) {
   .hero {
-    background-image: url("/images/hero2-min.jpg");
+    background-image: url("/images/hero2.jpg");
     background-position: center;
   }
 }
