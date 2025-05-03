@@ -20,34 +20,33 @@ document.querySelectorAll(".menu-items a").forEach((item) => {
 // Map initialization
 document.addEventListener("DOMContentLoaded", function () {
   // Create map centered at your venue (latitude, longitude)
-  const map = L.map("map").setView([17.31325, 76.8163], 15);
+  if (document.getElementById("map")) {
+    const map = L.map("map").setView([17.31325, 76.8163], 15);
 
-  // Add OpenStreetMap tiles
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    attribution:
-      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-  }).addTo(map);
+    // Add OpenStreetMap tiles
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution:
+        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    }).addTo(map);
 
-  // Add marker for venue
-  const marker = L.marker([17.31325, 76.8163]).addTo(map);
+    // Add marker for venue
+    const marker = L.marker([17.31325, 76.8163]).addTo(map);
 
-  // Add popup with venue info
-  marker
-    .bindPopup(
-      `
-    <b>Khamitkar Bhavan, Mangal karyalaya</b><br>
-    Shree Krishneshwar Temple Compound,<br>
-    New Jewargi Rd,<br>
-    Kalaburagi,Karnataka 585102
-  `
-    )
-    .openPopup();
-});
+    // Add popup with venue info
+    marker
+      .bindPopup(
+        `
+      <b>Khamitkar Bhavan, Mangal karyalaya</b><br>
+      Shree Krishneshwar Temple Compound,<br>
+      New Jewargi Rd,<br>
+      Kalaburagi,Karnataka 585102
+    `
+      )
+      .openPopup();
+  }
 
-// Form submission handling for wishes
-document.addEventListener("DOMContentLoaded", function () {
-  // Find the form in the wishes section if it exists
-  const wishesForm = document.querySelector("#wishes");
+  // Form submission handling for wishes - FIXED VERSION
+  const wishesForm = document.querySelector("#wishes form"); // More specific selector
   if (wishesForm) {
     wishesForm.addEventListener("submit", function (event) {
       event.preventDefault();
@@ -55,11 +54,17 @@ document.addEventListener("DOMContentLoaded", function () {
       // Get form values
       const name = document.getElementById("name").value;
       const email = document.getElementById("email").value;
+      const relation = document.getElementById("relation").value;
       const message = document.getElementById("message").value;
 
       // Simple validation
-      if (name.trim() === "" || message.trim() === "" || email.trim() === "") {
-        alert("Please enter your name, email, and wishes");
+      if (
+        name.trim() === "" ||
+        message.trim() === "" ||
+        email.trim() === "" ||
+        relation === ""
+      ) {
+        alert("Please fill in all required fields");
         return;
       }
 
@@ -81,7 +86,6 @@ document.addEventListener("DOMContentLoaded", function () {
         submitButton.textContent = originalButtonText;
         submitButton.disabled = false;
       }, 1000);
-      submitButton.textContent = originalButtonText;
     });
   }
 });
@@ -102,9 +106,9 @@ function showThankYouPopup(name) {
   const message = document.createElement("div");
   message.className = "popup-message";
   message.innerHTML = `
+    <div class="heart-icon">❤️</div>
     <h3>Thank You, ${name}!</h3>
     <p>Your wishes have been received. We appreciate your kind words and blessings for our special day.</p>
-    <div class="heart-icon">❤️</div>
     <p>- Vijaylaxmi & Viresh</p>
   `;
 
