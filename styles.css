@@ -588,6 +588,30 @@ footer {
   }
 }
 
+/* Fix for profile images */
+.profile-image {
+  transition: transform 0.5s ease, box-shadow 0.5s ease;
+  /* Change opacity from 0 to 1 so they're visible by default */
+  opacity: 1;
+}
+
+/* Modify animations to make them visible first, then animate */
+.profile-image:first-child {
+  animation: fadeInLeft 1.2s ease-out, borderGlow 2s infinite;
+  animation-delay: 0s, 2s;
+}
+
+.profile-image:last-child {
+  animation: fadeInRight 1.2s ease-out, borderGlow 2s infinite;
+  animation-delay: 0s, 2s;
+}
+
+/* Ensure section titles are visible */
+.section-title {
+  opacity: 1;
+  animation: fadeInDown 1s ease-out;
+}
+
 /* Hero Text Animation */
 @keyframes fadeInUp {
   from {
@@ -711,7 +735,80 @@ footer {
   animation: fadeInDown 1s ease-out forwards;
 }
 
-/* Add this class with JavaScript when section is in viewport */
 .section-title.visible {
   opacity: 1;
+}
+
+/* Scroll Down Indicator */
+.scroll-down {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  z-index: 10;
+  animation: bounce 2s infinite;
+}
+
+.scroll-down a {
+  color: #fff;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.mouse {
+  width: 26px;
+  height: 40px;
+  border: 2px solid #fff;
+  border-radius: 20px;
+  display: flex;
+  justify-content: center;
+  padding-top: 8px;
+  margin-bottom: 5px;
+}
+
+.mouse-wheel {
+  width: 4px;
+  height: 8px;
+  background-color: #fff;
+  border-radius: 2px;
+  animation: scrollWheel 1.5s infinite;
+}
+
+.scroll-text {
+  font-size: 12px;
+  letter-spacing: 1px;
+  margin-top: 5px;
+  text-transform: uppercase;
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes scrollWheel {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(12px);
+    opacity: 0;
+  }
+}
+
+@keyframes bounce {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    transform: translateX(-50%) translateY(0);
+  }
+  40% {
+    transform: translateX(-50%) translateY(-10px);
+  }
+  60% {
+    transform: translateX(-50%) translateY(-5px);
+  }
 }

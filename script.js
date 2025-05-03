@@ -45,8 +45,8 @@ document.addEventListener("DOMContentLoaded", function () {
       .openPopup();
   }
 
-  // Form submission handling for wishes - FIXED VERSION
-  const wishesForm = document.querySelector("#wishes form"); // More specific selector
+  // Form submission handling for wishes
+  const wishesForm = document.getElementById("wishesForm");
   if (wishesForm) {
     wishesForm.addEventListener("submit", function (event) {
       event.preventDefault();
@@ -88,113 +88,19 @@ document.addEventListener("DOMContentLoaded", function () {
       }, 1000);
     });
   }
-});
-
-// Function to show thank you popup
-function showThankYouPopup(name) {
-  // Create popup elements
-  const popup = document.createElement("div");
-  popup.className = "thank-you-popup";
-
-  const popupContent = document.createElement("div");
-  popupContent.className = "popup-content";
-
-  const closeBtn = document.createElement("span");
-  closeBtn.className = "close-popup";
-  closeBtn.innerHTML = "&times;";
-
-  const message = document.createElement("div");
-  message.className = "popup-message";
-  message.innerHTML = `
-    <div class="heart-icon">❤️</div>
-    <h3>Thank You, ${name}!</h3>
-    <p>Your wishes have been received. We appreciate your kind words and blessings for our special day.</p>
-    <p>- Vijaylaxmi & Viresh</p>
-  `;
-
-  // Assemble popup
-  popupContent.appendChild(closeBtn);
-  popupContent.appendChild(message);
-  popup.appendChild(popupContent);
-
-  // Add to body
-  document.body.appendChild(popup);
-
-  // Add event listener to close button
-  closeBtn.addEventListener("click", function () {
-    document.body.removeChild(popup);
-  });
-
-  // Close popup when clicking outside
-  popup.addEventListener("click", function (event) {
-    if (event.target === popup) {
-      document.body.removeChild(popup);
-    }
-  });
-
-  // Auto-close after 8 seconds
-  setTimeout(function () {
-    if (document.body.contains(popup)) {
-      document.body.removeChild(popup);
-    }
-  }, 8000);
-}
-
-// Animation observer for section titles
-document.addEventListener("DOMContentLoaded", function () {
-  // Get all section titles
-  const sectionTitles = document.querySelectorAll(".section-title");
-
-  // Get profile images for scroll-based animation
-  const profileImages = document.querySelectorAll(".profile-image");
-
-  // Create intersection observer for section titles
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        // Add visible class when element is in view
-        if (entry.isIntersecting) {
-          entry.target.classList.add("visible");
-          // Stop observing once animation is triggered
-          observer.unobserve(entry.target);
-        }
-      });
-    },
-    {
-      // Start animation when element is 20% visible
-      threshold: 0.2,
-    }
-  );
-
-  // Create intersection observer for profile images
-  const profileObserver = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("visible");
-          // Stop observing once animation is triggered
-          profileObserver.unobserve(entry.target);
-        }
-      });
-    },
-    {
-      threshold: 0.3,
-    }
-  );
-
-  // Observe each section title
-  sectionTitles.forEach((title) => {
-    observer.observe(title);
-  });
-
-  // Observe each profile image
-  profileImages.forEach((image) => {
-    profileObserver.observe(image);
-  });
 
   // Add staggered animation delay to section titles
+  const sectionTitles = document.querySelectorAll(".section-title");
   sectionTitles.forEach((title, index) => {
     title.style.animationDelay = `${0.3 + index * 0.1}s`;
+    // Make section titles visible immediately
+    title.classList.add("visible");
+  });
+
+  // FIX: Make profile images visible immediately
+  const profileImages = document.querySelectorAll(".profile-image");
+  profileImages.forEach((image) => {
+    image.classList.add("visible");
   });
 
   // Add subtle entrance animation for event cards
@@ -253,4 +159,128 @@ document.addEventListener("DOMContentLoaded", function () {
       heroSubtitle.style.transform = "translateY(0)";
     }, 100);
   }
+
+  // Smooth scroll for the scroll down indicator and all navigation links
+  document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+    anchor.addEventListener("click", function (e) {
+      e.preventDefault();
+
+      const targetId = this.getAttribute("href");
+      const targetElement = document.querySelector(targetId);
+
+      if (targetElement) {
+        window.scrollTo({
+          top: targetElement.offsetTop - 70, // Adjust for header height
+          behavior: "smooth",
+        });
+
+        // Close mobile menu if open
+        if (menu.classList.contains("active")) {
+          menu.classList.remove("active");
+        }
+      }
+    });
+  });
+
+  // Add additional notification styles
+  const style = document.createElement("style");
+  style.textContent = `
+    .music-notification {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      background-color: rgba(230, 197, 112, 0.95);
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+      z-index: 1000;
+      cursor: pointer;
+      animation: slideUp 0.5s ease;
+    }
+    
+    .notification-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: #5d4b4b;
+    }
+    
+    .notification-content p {
+      margin: 0;
+      margin-right: 15px;
+      font-weight: bold;
+    }
+    
+    .notification-close {
+      background: none;
+      border: none;
+      color: #5d4b4b;
+      cursor: pointer;
+      font-size: 16px;
+      padding: 0 5px;
+    }
+    
+    @keyframes slideUp {
+      from {
+        transform: translateY(100px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+  `;
+
+  document.head.appendChild(style);
 });
+
+// Function to show thank you popup
+function showThankYouPopup(name) {
+  // Create popup elements
+  const popup = document.createElement("div");
+  popup.className = "thank-you-popup";
+
+  const popupContent = document.createElement("div");
+  popupContent.className = "popup-content";
+
+  const closeBtn = document.createElement("span");
+  closeBtn.className = "close-popup";
+  closeBtn.innerHTML = "&times;";
+
+  const message = document.createElement("div");
+  message.className = "popup-message";
+  message.innerHTML = `
+    <div class="heart-icon">❤️</div>
+    <h3>Thank You, ${name}!</h3>
+    <p>Your wishes have been received. We appreciate your kind words and blessings for our special day.</p>
+    <p>- Vijaylaxmi & Viresh</p>
+  `;
+
+  // Assemble popup
+  popupContent.appendChild(closeBtn);
+  popupContent.appendChild(message);
+  popup.appendChild(popupContent);
+
+  // Add to body
+  document.body.appendChild(popup);
+
+  // Add event listener to close button
+  closeBtn.addEventListener("click", function () {
+    document.body.removeChild(popup);
+  });
+
+  // Close popup when clicking outside
+  popup.addEventListener("click", function (event) {
+    if (event.target === popup) {
+      document.body.removeChild(popup);
+    }
+  });
+
+  // Auto-close after 8 seconds
+  setTimeout(function () {
+    if (document.body.contains(popup)) {
+      document.body.removeChild(popup);
+    }
+  }, 8000);
+}
